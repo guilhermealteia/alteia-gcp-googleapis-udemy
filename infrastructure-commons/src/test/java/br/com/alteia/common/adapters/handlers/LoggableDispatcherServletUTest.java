@@ -1,9 +1,5 @@
 package br.com.alteia.common.adapters.handlers;
 
-import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.api.trace.Span;
-import io.opentelemetry.api.trace.SpanBuilder;
-import io.opentelemetry.api.trace.Tracer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -16,23 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class LoggableDispatcherServletUTest {
-
-    @Mock
-    private OpenTelemetry openTelemetry;
-
-    @Mock
-    private Tracer tracer;
-
-    @Mock
-    private SpanBuilder spanBuilder;
-
-    @Mock
-    private Span span;
 
     @Mock
     private HttpServletRequest request;
@@ -49,21 +32,15 @@ class LoggableDispatcherServletUTest {
     @Test
     void doDispatch() throws Exception {
         when(request.getRequestURI()).thenReturn("uri/exemplo");
-        when(openTelemetry.getTracer(anyString())).thenReturn(tracer);
-        when(tracer.spanBuilder(anyString())).thenReturn(spanBuilder);
-        when(spanBuilder.startSpan()).thenReturn(span);
         when(request.getHeaderNames()).thenReturn(Collections.enumeration(Collections.singleton("header1")));
 
-        LoggableDispatcherServlet loggableDispatcherServlet = new LoggableDispatcherServlet(openTelemetry);
+        LoggableDispatcherServlet loggableDispatcherServlet = new LoggableDispatcherServlet();
         assertDoesNotThrow(() -> loggableDispatcherServlet.doDispatch(request, response));
     }
 
     @Test
     void doDispatchWithOtherServletRequestAndResponse() throws Exception {
         when(contentCachingRequestWrapper.getRequestURI()).thenReturn("uri/exemplo");
-        when(openTelemetry.getTracer(anyString())).thenReturn(tracer);
-        when(tracer.spanBuilder(anyString())).thenReturn(spanBuilder);
-        when(spanBuilder.startSpan()).thenReturn(span);
         when(contentCachingRequestWrapper.getHeaderNames()).thenReturn(Collections.enumeration(Collections.singleton("header1")));
 
         when(contentCachingRequestWrapper.getContentAsByteArray()).thenReturn("Payload de request".getBytes());
@@ -72,7 +49,7 @@ class LoggableDispatcherServletUTest {
         when(contentCachingRequestWrapper.getCharacterEncoding()).thenReturn("UTF-8");
         when(contentCachingResponseWrapper.getCharacterEncoding()).thenReturn("UTF-8");
 
-        LoggableDispatcherServlet loggableDispatcherServlet = new LoggableDispatcherServlet(openTelemetry);
+        LoggableDispatcherServlet loggableDispatcherServlet = new LoggableDispatcherServlet();
         assertDoesNotThrow(() -> loggableDispatcherServlet.doDispatch(contentCachingRequestWrapper, contentCachingResponseWrapper));
     }
 }

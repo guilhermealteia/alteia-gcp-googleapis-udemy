@@ -3,11 +3,8 @@ package br.com.alteia.microservicechangeit.use_cases.common.utils;
 import br.com.alteia.microservicechangeit.common.exceptions.InvalidEntityException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import static br.com.alteia.microservicechangeit.use_cases.common.utils.EntityFieldsValidations.ONLY_LETTERS_PATTERN;
-import static br.com.alteia.microservicechangeit.use_cases.common.utils.EntityFieldsValidations.isCpfValid;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -86,26 +83,6 @@ class EntityFieldsValidationsUTest {
         @Test
         void minLengthAsNotExpected() {
             assertThrows(InvalidEntityException.class, () -> EntityFieldsValidations.minValue("value", -100, 1));
-        }
-    }
-
-    @Nested
-    class validateIsCpfValid {
-        @ParameterizedTest
-        @ValueSource(strings = {"718.531.060-11", "00762197048", "894.618.700-00"})
-        void isValidCpf(String cpf) {
-            assertDoesNotThrow(() -> isCpfValid(cpf));
-        }
-
-        @ParameterizedTest
-        @ValueSource(strings = {"71889923922", "0762197048", "00000000000"})
-        void isNotValidCpf(String cpf) {
-            assertThrows(InvalidEntityException.class, () -> isCpfValid(cpf));
-        }
-
-        @Test
-        void nullCpf() {
-            assertThrows(InvalidEntityException.class, () -> isCpfValid(null));
         }
     }
 }
