@@ -1,6 +1,26 @@
 version: "3.7"
 
 services:
+  application:
+    container_name: alteia-gcp-googleapis-udemy
+    image: alteia-gcp-googleapis-udemy:latest
+    restart: always
+    build: .
+    environment:
+      REDIS_CACHE_ENABLED: "true"
+      REDIS_HOST: redis_db
+      REDIS_PORT: 6379
+      REDIS_EXPIRETIME: 10
+      REDIS_TIMEOUT: 1
+      JWT_SECRET: "YWJyYWNhZGFicmFwZWRlY2FicmE"
+      ENV: LOCAL_DOCKER_COMPOSE
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "5000:5000"
+      - "9091:9091"
+    networks:
+      - "alteianet"
+
   redis_db:
     image: redis:6.2.6
     restart: always
@@ -10,6 +30,28 @@ services:
     networks:
       - "alteia_network"
 
+  prometheus:
+    image: bitnami/prometheus:2.32.1
+    restart: on-failure
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - "alteianet"
+
+  grafana:
+    image: grafana/grafana:8.3.3
+    restart: on-failure
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - "prometheus"
+    networks:
+      - "alteianet"
+
 networks:
-  alteia_network:
+  alteianet:
     driver: bridge
