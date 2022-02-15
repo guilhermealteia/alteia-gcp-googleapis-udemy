@@ -1,4 +1,4 @@
-# cleanarc-springboot
+# alteia-gcp-googleapis-udemy
 
 Esqueleto de Microsserviço baseado no clean code e na architecture com Spring Boot
 
@@ -205,8 +205,8 @@ redis-cli monitor
 
 ```
 ./gradlew assemble
-docker build --build-arg JAR_FILE=infrastructure/build/libs/infrastructure-1.0.0-SNAPSHOT.jar --tag=vv/cleanarch-spring .
-docker run -p 8080:8080 --network="host" -ti -v /vv_logs/:/vv_logs/ --name cleanarch-relational vv/cleanarch-spring
+docker build --build-arg JAR_FILE=infrastructure/build/libs/infrastructure-1.0.0-SNAPSHOT.jar --tag=alteia/alteia-gcp-googleapis-udemy:latest .
+docker run -p 8080:8080 --network="host" -ti --name cleanarch-relational alteia/alteia-gcp-googleapis-udemy
 ```
 
 ### Geração de swagger do gRPC
