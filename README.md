@@ -209,26 +209,6 @@ docker build --build-arg JAR_FILE=infrastructure/build/libs/infrastructure-1.0.0
 docker run -p 8080:8080 --network="host" -ti --name cleanarch-relational alteia/alteia-gcp-googleapis-udemy
 ```
 
-### Geração de swagger do gRPC
-https://github.com/grpc-swagger/grpc-swagger#build-and-run
-
-```
-wget https://github.com/grpc-swagger/grpc-swagger/releases/latest/download/grpc-swagger.jar 
-java -jar grpc-swagger.jar --server.port=8080
-```
-
-Abra o link http://localhost:8080/ui/r.html
-No campo `Grpc-swagger Server` digite:
-```
-http://localhost:8080
-```
-
-No campo `Endpoint Register` digite:
-```
-localhost:9091
-```
-Clique em `Register` e boa
-
 ## Install
 
 ```
