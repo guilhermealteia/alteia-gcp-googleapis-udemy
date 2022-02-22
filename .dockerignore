@@ -4,6 +4,8 @@
 .jpb
 build
 docs
-target
 /*/build/*
 fluentd/
+Dockerfile
+.dockerignore
+target/

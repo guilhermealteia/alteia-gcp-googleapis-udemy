@@ -185,39 +185,37 @@ Temos 3 pacotes essenciais:
 * `infrastructure`: Contém detalhes técnicos, configurações, camadas de base de dados, controllers, ...e não podem
   conter regras de negócio. Podem possuir dependências com frameworks.
 
+# Subindo a aplicação fora do container (Pela IDE,...)
+
 ## 1 - Suba as dependências da aplicação com o docker-compose para os testes locais
 
 ```
-docker-compose up -d
+docker-compose -f docker-compose-only-redis.yaml up -d
 ```
-
-
 
 ## 2 - Rode a aplicação localmente
 
 ```
+gradle bootRun
+```
+ou
+```
 ./gradlew bootRun
 ```
 
-## 2 - Rode a aplicação via docker
-
-OBS:
-
-1 -  Comente ou remova o comentário das linhas 37 e 38 conforme o seu sistema operacional
-
-2 - Execute o comando docker compose abaixo (a imagem docker será criada através do parametro --build)
+# Rode a aplicação no container docker
 
 ```
-docker-compose -f docker-compose-app.yaml up -d --build  
+docker-compose up -d --build  
 ```
 
-3 - Para acessar os logs via kibana vá a URL http://localhost:5601/app/management/kibana/indexPatterns
-e crie um index pattern com o texto fluentd-*. Salve e depois vá na seção "Discover", os logs da aplicação 
+1 - Para acessar os logs via kibana vá a URL http://localhost:5601/app/management/kibana/indexPatterns
+e crie um index pattern com o texto fluentd-*. Salve e depois vá na seção "Discover", os logs da aplicação
 estarão listados ali
 
-4 - Para parar a aplicação execute o comando
+2 - Para parar a aplicação e suas dependências, execute o comando:
 ```
-docker compose -f docker-compose-app.yaml down -v  
+docker-compose down -v  
 ```
 
 ## Testes
@@ -263,12 +261,11 @@ redis-cli --latency -h localhost -p 6379
 redis-cli monitor
 ```
 
-### Gere e execute uma imagem docker (mude o artefato {.jar})
+### Gere e execute uma imagem docker:
 
 ```
-./gradlew assemble
-docker build --build-arg JAR_FILE=infrastructure/build/libs/infrastructure-1.0.0-SNAPSHOT.jar --tag=alteia/alteia-gcp-googleapis-udemy:latest .
-docker run -p 8080:8080 --network="host" -ti --name cleanarch-relational alteia/alteia-gcp-googleapis-udemy
+docker build  --tag=alteia/alteia-gcp-googleapis-udemy:latest .
+docker run -p 8080:8080 -ti --name cleanarch-relational alteia/alteia-gcp-googleapis-udemy
 ```
 
 ## Install
